@@ -424,8 +424,7 @@ class Response
                 }
 
 
-                $mess = "hasSignedResponse" . var_export($hasSignedResponse);
-                $testError = new \Error($mess);
+                $testError = new \Error("hasSignedResponse" . strval($hasSignedResponse));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
                         ['exception' => $testError]
@@ -440,13 +439,13 @@ class Response
 
                 // If find a Signature on the Response, validates it checking the original response
                 if ($hasSignedResponse && !Utils::validateSign($this->document, $cert, $fingerprint, $fingerprintalg, Utils::RESPONSE_SIGNATURE_XPATH, $multiCerts)) {
-                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected. fingerprint" . var_export($fingerprint));
+                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected. fingerprint" . strval($fingerprint));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
                         ['exception' => $testError]
                     );
 
-                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected. multiCerts" . var_export($multiCerts));
+                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected. multiCerts" . strval($multiCerts));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
                         ['exception' => $testError]

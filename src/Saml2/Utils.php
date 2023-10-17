@@ -1499,19 +1499,18 @@ class Utils
 
         $valid = false;
         foreach ($multiCerts as $cert) {
-            $testError = new \Error("foreach (multiCerts as cert)" . $cert);
-            Injector::inst()->get(LoggerInterface::class)->error(
-                $testError->getMessage(),
-                ['exception' => $testError]
-            );
+            // $testError = new \Error("foreach (multiCerts as cert)" . $cert);
+            // Injector::inst()->get(LoggerInterface::class)->error(
+            //     $testError->getMessage(),
+            //     ['exception' => $testError]
+            // );
             if (!empty($cert)) {
                 $objKey->loadKey($cert, false, true);
                 if ($objXMLSecDSig->verify($objKey) === 1) {
                     $valid = true;
                     break;
                 }
-                else {
-                    $
+                else 
                     $testError = new \Error("objXMLSecDSig->verify objKey" . strval($objXMLSecDSig->verify($objKey)));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
