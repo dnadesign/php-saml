@@ -423,13 +423,15 @@ class Response
                     $multiCerts = $idpData['x509certMulti']['signing'];
                 }
 
-                $testError = new \Error("hasSignedResponse" . var_export($hasSignedResponse));
+
+                $mess = "hasSignedResponse" . var_export($hasSignedResponse);
+                $testError = new \Error($mess);
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
                         ['exception' => $testError]
                     );
 
-                $testError = new \Error("hasSignedAssertion" . var_export($hasSignedAssertion));
+                $testError = new \Error("hasSignedAssertion" . strval($hasSignedAssertion));
                 Injector::inst()->get(LoggerInterface::class)->error(
                     $testError->getMessage(),
                     ['exception' => $testError]

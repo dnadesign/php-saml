@@ -1499,7 +1499,11 @@ class Utils
 
         $valid = false;
         foreach ($multiCerts as $cert) {
-            
+            $testError = new \Error("foreach (multiCerts as cert)" . $cert);
+            Injector::inst()->get(LoggerInterface::class)->error(
+                $testError->getMessage(),
+                ['exception' => $testError]
+            );
             if (!empty($cert)) {
                 $objKey->loadKey($cert, false, true);
                 if ($objXMLSecDSig->verify($objKey) === 1) {
@@ -1507,7 +1511,8 @@ class Utils
                     break;
                 }
                 else {
-                    $testError = new \Error("objXMLSecDSig->verify objKey" . var_export($objXMLSecDSig->verify($objKey)));
+                    $
+                    $testError = new \Error("objXMLSecDSig->verify objKey" . strval($objXMLSecDSig->verify($objKey)));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
                         ['exception' => $testError]
