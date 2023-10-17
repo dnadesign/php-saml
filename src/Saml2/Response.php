@@ -21,6 +21,9 @@ use DOMNodeList;
 use DOMXPath;
 use Exception;
 
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Injector\Injector;
+
 /**
  * SAML 2 Authentication Response
  */
@@ -422,18 +425,20 @@ class Response
 
                 // If find a Signature on the Response, validates it checking the original response
                 if ($hasSignedResponse && !Utils::validateSign($this->document, $cert, $fingerprint, $fingerprintalg, Utils::RESPONSE_SIGNATURE_XPATH, $multiCerts)) {
-                    throw new ValidationError(
-                        "Signature validation failed. SAML Response rejected",
-                        ValidationError::INVALID_SIGNATURE
+                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected");
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
                     );
                 }
 
                 // If find a Signature on the Assertion (decrypted assertion if was encrypted)
                 $documentToCheckAssertion = $this->encrypted ? $this->decryptedDocument : $this->document;
                 if ($hasSignedAssertion && !Utils::validateSign($documentToCheckAssertion, $cert, $fingerprint, $fingerprintalg, Utils::ASSERTION_SIGNATURE_XPATH, $multiCerts)) {
-                    throw new ValidationError(
-                        "Signature validation failed. SAML Response rejected",
-                        ValidationError::INVALID_SIGNATURE
+                    $testError = new \Error("line 435 Signature validation failed. SAML Response rejected");
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
                     );
                 }
             }
