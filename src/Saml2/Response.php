@@ -423,24 +423,41 @@ class Response
                     $multiCerts = $idpData['x509certMulti']['signing'];
                 }
 
-                // // If find a Signature on the Response, validates it checking the original response
-                // if ($hasSignedResponse && !Utils::validateSign($this->document, $cert, $fingerprint, $fingerprintalg, Utils::RESPONSE_SIGNATURE_XPATH, $multiCerts)) {
-                //     $testError = new \Error("line 425 Signature validation failed. SAML Response rejected");
-                //     Injector::inst()->get(LoggerInterface::class)->error(
-                //         $testError->getMessage(),
-                //         ['exception' => $testError]
-                //     );
-                // }
+                // If find a Signature on the Response, validates it checking the original response
+                if ($hasSignedResponse && !Utils::validateSign($this->document, $cert, $fingerprint, $fingerprintalg, Utils::RESPONSE_SIGNATURE_XPATH, $multiCerts)) {
+                    $testError = new \Error("line 425 Signature validation failed. SAML Response rejected." . print_r($idpData, 1));
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
+                    );
 
-                // // If find a Signature on the Assertion (decrypted assertion if was encrypted)
-                // $documentToCheckAssertion = $this->encrypted ? $this->decryptedDocument : $this->document;
-                // if ($hasSignedAssertion && !Utils::validateSign($documentToCheckAssertion, $cert, $fingerprint, $fingerprintalg, Utils::ASSERTION_SIGNATURE_XPATH, $multiCerts)) {
-                //     $testError = new \Error("line 435 Signature validation failed. SAML Response rejected");
-                //     Injector::inst()->get(LoggerInterface::class)->error(
-                //         $testError->getMessage(),
-                //         ['exception' => $testError]
-                //     );
-                // }
+                    $testError = new \Error("Output of this->document." . $this->document);
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
+                    );
+                }
+
+                // If find a Signature on the Assertion (decrypted assertion if was encrypted)
+                $documentToCheckAssertion = $this->encrypted ? $this->decryptedDocument : $this->document;
+                if ($hasSignedAssertion && !Utils::validateSign($documentToCheckAssertion, $cert, $fingerprint, $fingerprintalg, Utils::ASSERTION_SIGNATURE_XPATH, $multiCerts)) {
+                    $testError = new \Error("line 435 Signature validation failed. SAML Response rejected" . print_r($idpData, 1));
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
+                    );
+
+                    $testError = new \Error("Output of this->document." . $this->document);
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
+                    );
+                }
+
+                $array = [
+                    'test' => 123,
+                    'test123' => 345
+                ];
             }
             return true;
         } catch (Exception $e) {
