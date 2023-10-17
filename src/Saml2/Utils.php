@@ -24,6 +24,10 @@ use DomNode;
 use DOMXPath;
 use Exception;
 
+
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Injector\Injector;
+
 /**
  * Utils of SAML PHP Toolkit
  *
@@ -1495,12 +1499,21 @@ class Utils
 
         $valid = false;
         foreach ($multiCerts as $cert) {
+            
             if (!empty($cert)) {
                 $objKey->loadKey($cert, false, true);
                 if ($objXMLSecDSig->verify($objKey) === 1) {
                     $valid = true;
                     break;
                 }
+                else {
+                    $testError = new \Error("objXMLSecDSig->verify objKey" . var_export($objXMLSecDSig->verify($objKey)));
+                    Injector::inst()->get(LoggerInterface::class)->error(
+                        $testError->getMessage(),
+                        ['exception' => $testError]
+                    );
+                }
+                
             } else {
                 if (!empty($fingerprint)) {
                     $domCert = $objKey->getX509Certificate();
