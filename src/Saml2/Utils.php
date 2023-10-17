@@ -1510,7 +1510,7 @@ class Utils
                     $valid = true;
                     break;
                 }
-                else 
+                else {
                     $testError = new \Error("objXMLSecDSig->verify objKey" . strval($objXMLSecDSig->verify($objKey)));
                     Injector::inst()->get(LoggerInterface::class)->error(
                         $testError->getMessage(),
