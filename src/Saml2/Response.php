@@ -452,6 +452,12 @@ class Response
                     );
                 }
 
+                $testError = new \Error("this->encrypted " . strval($this->encrypted));
+                Injector::inst()->get(LoggerInterface::class)->error(
+                    $testError->getMessage(),
+                    ['exception' => $testError]
+                );
+
                 // If find a Signature on the Assertion (decrypted assertion if was encrypted)
                 $documentToCheckAssertion = $this->encrypted ? $this->decryptedDocument : $this->document;
                 if ($hasSignedAssertion && !Utils::validateSign($documentToCheckAssertion, $cert, $fingerprint, $fingerprintalg, Utils::ASSERTION_SIGNATURE_XPATH, $multiCerts)) {
@@ -462,10 +468,13 @@ class Response
                     );
                 }
 
-                $array = [
-                    'test' => 123,
-                    'test123' => 345
-                ];
+                $document = clone $this->document;
+
+                $testError = new \Error("xml " . $document->saveXML());
+                Injector::inst()->get(LoggerInterface::class)->error(
+                    $testError->getMessage(),
+                    ['exception' => $testError]
+                );
             }
             return true;
         } catch (Exception $e) {
