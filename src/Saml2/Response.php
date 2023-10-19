@@ -414,7 +414,7 @@ class Response
             } else {
                 $cert = $idpData['x509cert'];
                 $fingerprint = $idpData['certFingerprint'];
-                $fingerprintalg = $idpData['certFingerprintAlgorithm'];
+                $fingerprintalg = 'sha256';
 
                 $multiCerts = null;
                 $existsMultiX509Sign = isset($idpData['x509certMulti']) && isset($idpData['x509certMulti']['signing']) && !empty($idpData['x509certMulti']['signing']);
